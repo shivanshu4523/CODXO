@@ -240,6 +240,11 @@ h1 {
 .weather-cards .card h3 {
   font-size: 1.2rem;
   font-weight: 600;
+  color: #357abd;
+}
+
+.details h2 {
+  color: #357abd;
 }
 
 /* Responsive styling */
