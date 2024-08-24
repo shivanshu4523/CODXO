@@ -4,7 +4,7 @@ const locationButton = document.querySelector(".location-btn");
 const currentWeatherDiv = document.querySelector(".current-weather");
 const weatherCardsDiv = document.querySelector(".weather-cards");
 
-const API_KEY = "5b28361e4d3a1189171fd090155607ac"; // API key for OpenWeatherMap API
+const API_KEY = "5b28361e4d3a1189171fd090155607ac"; 
 
 // Function to get day name from a date
 const getDayName = (dateString) => {
@@ -17,7 +17,7 @@ const getDayName = (dateString) => {
 const createWeatherCard = (cityName, weatherItem, index) => {
     const date = new Date(weatherItem.dt_txt);
     const formattedDate = `${getDayName(weatherItem.dt_txt)}, ${date.getDate()}/${date.getMonth() + 1}`;
-    
+
     // Define custom weather icons based on weather code
     const weatherIcons = {
         "01d": "images/sun.png",
@@ -39,11 +39,11 @@ const createWeatherCard = (cityName, weatherItem, index) => {
         "50d": "images/mist.png",
         "50n": "images/mist.png"
     };
-    
+
     // Retrieve the icon based on the weather code
     const weatherCode = weatherItem.weather[0].icon;
-    const iconPath = weatherIcons[weatherCode] || "images/default.png"; // Default icon if code not found
-    
+    const iconPath = weatherIcons[weatherCode] || "images/default.png"; 
+
     if (index === 0) { // Main weather card
         return `
             <div class="details">
@@ -73,7 +73,6 @@ const getWeatherDetails = (cityName, latitude, longitude) => {
     const WEATHER_API_URL = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${API_KEY}`;
 
     fetch(WEATHER_API_URL).then(response => response.json()).then(data => {
-        // Filter forecasts to get one forecast per day
         const uniqueForecastDays = [];
         const fiveDaysForecast = data.list.filter(forecast => {
             const forecastDate = new Date(forecast.dt_txt).getDate();
@@ -95,7 +94,7 @@ const getWeatherDetails = (cityName, latitude, longitude) => {
             } else {
                 weatherCardsDiv.insertAdjacentHTML("beforeend", html);
             }
-        });        
+        });
     }).catch(() => {
         alert("Error fetching weather data. Please try again later.");
     });
@@ -106,7 +105,7 @@ const getCityCoordinates = () => {
     const cityName = cityInput.value.trim();
     if (cityName === "") return;
     const API_URL = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=${API_KEY}`;
-    
+
     fetch(API_URL).then(response => response.json()).then(data => {
         if (!data.length) return alert(`No data found for ${cityName}. Please try another city.`);
         const { lat, lon, name } = data[0];
