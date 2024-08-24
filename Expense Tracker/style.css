@@ -131,7 +131,8 @@ table {
     margin-top: 20px;
 }
 
-th, td {
+th,
+td {
     padding: 12px;
     text-align: left;
     border-bottom: 1px solid #ddd;
@@ -191,4 +192,24 @@ button.delete:hover {
     background-color: #4a90e2;
     color: #fff;
     border-color: #4a90e2;
+}
+
+#Food.active {
+    background-color: #48d225;
+    border-color: #4caf50;
+}
+
+#Transportation.active {
+    background-color: #d26d25;
+    border-color: #f86700;
+}
+
+#DailyNeeds.active {
+    background-color: #ddda22;
+    border-color: #fffb00;
+}
+
+#others.active {
+    background-color: #d13939;
+    border-color: #ff0000;
 }
