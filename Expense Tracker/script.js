@@ -76,6 +76,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (description && !isNaN(amount) && amount > 0 && category) {
             const tr = document.createElement('tr');
+
+            // Apply background color based on transaction type
+            const backgroundColor = transactionType === 'credit' ? '#d4edda' : '#f8d7da'; // Light green for credit, light red for debit
+
+            tr.style.backgroundColor = backgroundColor;
+
             tr.innerHTML = `
                 <td>${description}</td>
                 <td>₹${amount.toFixed(2)}</td>

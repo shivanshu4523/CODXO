@@ -143,9 +143,9 @@ th {
     font-weight: bold;
 }
 
-td {
+/* td {
     background-color: #fff;
-}
+} */
 
 tr:nth-child(even) {
     background-color: #f9f9f9;
