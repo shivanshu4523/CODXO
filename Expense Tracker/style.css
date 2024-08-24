@@ -164,3 +164,31 @@ button.delete {
 button.delete:hover {
     background-color: #c0392b;
 }
+
+.category-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.category-btn {
+    background-color: #f1f1f1;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    font-weight: bold;
+}
+
+.category-btn:hover {
+    background-color: #ddd;
+}
+
+.category-btn.active {
+    background-color: #4a90e2;
+    color: #fff;
+    border-color: #4a90e2;
+}

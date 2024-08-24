@@ -5,11 +5,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const slider = document.getElementById('slider');
     const creditBox = document.getElementById('credit-box');
     const debitBox = document.getElementById('debit-box');
+    const categoryButtons = document.querySelectorAll('.category-btn');
+    const categoryInput = document.getElementById('category');
+
+    // Add click event listener to each category button
+    categoryButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove 'active' class from all buttons
+            categoryButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Add 'active' class to the clicked button
+            button.classList.add('active');
+            
+            // Update hidden input with the selected category
+            categoryInput.value = button.getAttribute('data-category');
+        });
+    });
+
+    expenseForm.addEventListener('submit', (event) => {
+        if (!categoryInput.value) {
+            alert('Please select a category.');
+            event.preventDefault();
+        } else {
+            addTransaction(event);
+        }
+    });
 
     let totalBalance = 0;
     let transactionType = 'credit'; // Default to credit
-
-    expenseForm.addEventListener('submit', addTransaction);
 
     // Toggle between Credit and Debit
     creditBox.addEventListener('click', () => {
@@ -46,16 +69,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const descriptionInput = document.getElementById('description');
         const amountInput = document.getElementById('amount');
+        const category = categoryInput.value; // Get selected category
 
         const description = descriptionInput.value;
         const amount = parseFloat(amountInput.value);
 
-        if (description && !isNaN(amount) && amount > 0) {
+        if (description && !isNaN(amount) && amount > 0 && category) {
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>${description}</td>
                 <td>₹${amount.toFixed(2)}</td>
                 <td>${transactionType}</td>
+                <td>${category}</td> <!-- Add category to the table -->
                 <td><button class="delete" onclick="deleteTransaction(this, ${amount}, '${transactionType}')">Delete</button></td>
             `;
 
@@ -65,8 +90,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             descriptionInput.value = '';
             amountInput.value = '';
+            categoryInput.value = ''; // Clear selected category
+            categoryButtons.forEach(btn => btn.classList.remove('active')); // Remove active class from all buttons
         } else {
-            alert('Please enter a valid description and amount.');
+            alert('Please enter a valid description, amount, and category.');
         }
     }
 

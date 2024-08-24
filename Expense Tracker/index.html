@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
@@ -31,6 +32,18 @@
                     <label for="amount">Amount:</label>
                     <input type="number" id="amount" placeholder="Enter amount" required>
                 </div>
+                <div class="form-group">
+                    <label for="category">Category:</label>
+                    <div id="category-buttons" class="category-buttons">
+                        <button type="button" class="category-btn" data-category="Food">Food</button>
+                        <button type="button" class="category-btn" data-category="Transportation">Transportation</button>
+                        <button type="button" class="category-btn" data-category="Entertainment">Entertainment</button>
+                        <button type="button" class="category-btn" data-category="Others">Daily Needs</button>
+                        <button type="button" class="category-btn" data-category="Others">Others</button>
+                    </div>
+                    <input type="hidden" id="category" name="category" required>
+                </div>
+                
                 <button type="submit">Add Transaction</button>
             </form>
         </section>
@@ -42,6 +55,7 @@
                         <th>Description</th>
                         <th>Amount</th>
                         <th>Type</th>
+                        <th>Category</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -49,6 +63,7 @@
                     <!-- Transaction rows will be added here dynamically -->
                 </tbody>
             </table>
+            <canvas id="expense-chart"></canvas>
         </section>
     </div>
     <script src="script.js"></script>
