@@ -13,10 +13,36 @@ const getDayName = (dateString) => {
     return days[date.getDay()];
 }
 
-// Create weather card with updated styling
+// Create weather card with custom image paths
 const createWeatherCard = (cityName, weatherItem, index) => {
     const date = new Date(weatherItem.dt_txt);
     const formattedDate = `${getDayName(weatherItem.dt_txt)}, ${date.getDate()}/${date.getMonth() + 1}`;
+    
+    // Define custom weather icons based on weather code
+    const weatherIcons = {
+        "01d": "images/sun.png",
+        "01n": "images/moon.png",
+        "02d": "images/cloudy-day.png",
+        "02n": "images/cloudy.png",
+        "03d": "images/cloudy-day.png",
+        "03n": "images/cloudy..png",
+        "04d": "images/broken-clouds.png",
+        "04n": "images/broken-clouds.png",
+        "09d": "images/showers.png",
+        "09n": "images/showers.png",
+        "10d": "images/rain.png",
+        "10n": "images/rain.png",
+        "11d": "images/thunderstorm.png",
+        "11n": "images/thunderstorm.png",
+        "13d": "images/snow.png",
+        "13n": "images/snow.png",
+        "50d": "images/mist.png",
+        "50n": "images/mist.png"
+    };
+    
+    // Retrieve the icon based on the weather code
+    const weatherCode = weatherItem.weather[0].icon;
+    const iconPath = weatherIcons[weatherCode] || "images/default.png"; // Default icon if code not found
     
     if (index === 0) { // Main weather card
         return `
@@ -27,14 +53,14 @@ const createWeatherCard = (cityName, weatherItem, index) => {
                 <h6>Humidity: ${weatherItem.main.humidity}%</h6>
             </div>
             <div class="icon">
-                <img src="https://openweathermap.org/img/wn/${weatherItem.weather[0].icon}@4x.png" alt="weather-icon">
+                <img src="${iconPath}" alt="weather-icon">
                 <h6>${weatherItem.weather[0].description}</h6>
             </div>`;
     } else { // Forecast card
         return `
             <li class="card">
                 <h3>${formattedDate}</h3>
-                <img src="https://openweathermap.org/img/wn/${weatherItem.weather[0].icon}@4x.png" alt="weather-icon">
+                <img src="${iconPath}" alt="weather-icon">
                 <h6>Temp: ${(weatherItem.main.temp - 273.15).toFixed(2)}°C</h6>
                 <h6>Wind: ${weatherItem.wind.speed} M/S</h6>
                 <h6>Humidity: ${weatherItem.main.humidity}%</h6>
