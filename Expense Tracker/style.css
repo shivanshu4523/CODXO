@@ -144,10 +144,6 @@ th {
     font-weight: bold;
 }
 
-/* td {
-    background-color: #fff;
-} */
-
 tr:nth-child(even) {
     background-color: #f9f9f9;
 }
@@ -174,7 +170,7 @@ button.delete:hover {
 }
 
 .category-btn {
-    background-color: #f1f1f1;
+    background-color: #e4e4e4;
     border: 2px solid #ddd;
     border-radius: 8px;
     padding: 10px 20px;
@@ -185,13 +181,13 @@ button.delete:hover {
 }
 
 .category-btn:hover {
-    background-color: #ddd;
+    background-color: #c9c9c9;
 }
 
 .category-btn.active {
     background-color: #4a90e2;
     color: #fff;
-    border-color: #4a90e2;
+    border-color: #1a83fc;
 }
 
 #Food.active {
@@ -200,8 +196,8 @@ button.delete:hover {
 }
 
 #Transportation.active {
-    background-color: #d26d25;
-    border-color: #f86700;
+    background-color: #25d2c9;
+    border-color: #2bfff4;
 }
 
 #DailyNeeds.active {
