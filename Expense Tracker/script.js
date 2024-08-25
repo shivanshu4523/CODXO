@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
       totalBalance -= amount;
     }
 
-    totalBalanceSpan.textContent = `₹${totalBalance.toFixed(2)}`;
+    totalBalanceSpan.textContent = `${totalBalance.toFixed(2)}`;
     saveData();
   }
 
