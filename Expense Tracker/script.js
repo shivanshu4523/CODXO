@@ -8,15 +8,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const categoryButtons = document.querySelectorAll('.category-btn');
     const categoryInput = document.getElementById('category');
 
-        // Category color mapping
-        const categoryColors = {
-            'Food': '#48d225', // Green for Food
-            'Transportation': '#ff6f61', // Coral for Transportation
-            'Entertainment': '#ffeb3b', // Yellow for Entertainment
-            'Daily Needs': '#ffeb3b', // Yellow for Daily Needs
-            'Others': '#f44336' // Red for Others
-        };
-    
+    // Category color mapping
+    const categoryColors = {
+        'Food': '#48d225', // Green for Food
+        'Transportation': '#25d2c9', // Coral for Transportation
+        'Entertainment': '#4a90e2', // Yellow for Entertainment
+        'Daily Needs': '#ddda22', // Yellow for Daily Needs
+        'Others': '#d13939' // Red for Others
+    };
 
     // Add click event listener to each category button
     categoryButtons.forEach(button => {
@@ -71,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (type === 'debit') {
             totalBalance -= amount;
         }
-        totalBalanceSpan.textContent = `${totalBalance.toFixed(2)}`;
+        totalBalanceSpan.textContent = `₹${totalBalance.toFixed(2)}`;
     }
 
     function addTransaction(event) {
@@ -86,17 +85,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (description && !isNaN(amount) && amount > 0 && category) {
             const tr = document.createElement('tr');
-
+            
             // Apply background color based on transaction type
             const backgroundColor = transactionType === 'credit' ? '#d4edda' : '#f8d7da'; // Light green for credit, light red for debit
 
             tr.style.backgroundColor = backgroundColor;
 
+            // Set the text color for the category based on categoryColors
+            const categoryColor = categoryColors[category] || '#000000'; // Default to black if category not found
+
             tr.innerHTML = `
                 <td>${description}</td>
                 <td>₹${amount.toFixed(2)}</td>
                 <td>${transactionType}</td>
-                <td>${category}</td> 
+                <td style="color: ${categoryColor};">${category}</td> 
                 <td><button class="delete" onclick="deleteTransaction(this, ${amount}, '${transactionType}')">Delete</button></td>
             `;
 
