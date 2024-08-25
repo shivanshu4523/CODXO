@@ -24,6 +24,51 @@ document.addEventListener('DOMContentLoaded', () => {
     
     let rowToDelete;
     
+    // Load existing data from localStorage
+    const loadData = () => {
+        const storedData = JSON.parse(localStorage.getItem('expenses')) || [];
+        const storedBalance = parseFloat(localStorage.getItem('totalBalance')) || 0;
+
+        totalBalanceSpan.textContent = `₹${storedBalance.toFixed(2)}`;
+        storedData.forEach(transaction => {
+            const tr = document.createElement('tr');
+            const backgroundColor = transaction.type === 'credit' ? '#d4edda' : '#f8d7da';
+            const categoryColor = categoryColors[transaction.category] || '#000000';
+            
+            tr.style.backgroundColor = backgroundColor;
+            tr.innerHTML = `
+                <td>${transaction.description}</td>
+                <td>₹${transaction.amount.toFixed(2)}</td>
+                <td>${transaction.type}</td>
+                <td style="color: ${categoryColor};">${transaction.category}</td> 
+                <td><button class="delete">Delete</button></td>
+            `;
+            
+            expenseTableBody.appendChild(tr);
+            
+            tr.querySelector('.delete').addEventListener('click', function() {
+                rowToDelete = tr;
+                modal.style.display = 'block';
+            });
+        });
+    };
+
+    // Save current data to localStorage
+    const saveData = () => {
+        const transactions = [];
+        expenseTableBody.querySelectorAll('tr').forEach(row => {
+            const cells = row.querySelectorAll('td');
+            transactions.push({
+                description: cells[0].textContent,
+                amount: parseFloat(cells[1].textContent.replace('₹', '')),
+                type: cells[2].textContent,
+                category: cells[3].textContent
+            });
+        });
+        localStorage.setItem('expenses', JSON.stringify(transactions));
+        localStorage.setItem('totalBalance', totalBalanceSpan.textContent.replace('₹', ''));
+    };
+    
     categoryButtons.forEach(button => {
         button.addEventListener('click', () => {
             categoryButtons.forEach(btn => btn.classList.remove('active'));
@@ -41,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    let totalBalance = 0;
+    let totalBalance = parseFloat(localStorage.getItem('totalBalance')) || 0;
     let transactionType = 'credit';
     
     creditBox.addEventListener('click', () => {
@@ -71,6 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
             totalBalance -= amount;
         }
         totalBalanceSpan.textContent = `${totalBalance.toFixed(2)}`;
+        saveData();
     }
     
     function addTransaction(event) {
@@ -106,10 +152,9 @@ document.addEventListener('DOMContentLoaded', () => {
             categoryInput.value = '';
             categoryButtons.forEach(btn => btn.classList.remove('active'));
             
-            // Attach event listener for the new delete button
             tr.querySelector('.delete').addEventListener('click', function() {
-                rowToDelete = tr; // Store the row to delete
-                modal.style.display = 'block'; // Show the modal
+                rowToDelete = tr;
+                modal.style.display = 'block';
             });
         } else {
             alert('Please enter a valid description, amount, and category.');
@@ -117,11 +162,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     closeModalButton.addEventListener('click', () => {
-        modal.style.display = 'none'; // Hide the modal
+        modal.style.display = 'none';
     });
     
     cancelDeleteButton.addEventListener('click', () => {
-        modal.style.display = 'none'; // Hide the modal
+        modal.style.display = 'none';
     });
     
     confirmDeleteButton.addEventListener('click', () => {
@@ -139,8 +184,12 @@ document.addEventListener('DOMContentLoaded', () => {
             
             totalBalanceSpan.textContent = `₹${totalBalance.toFixed(2)}`;
             
-            rowToDelete = null; // Clear the reference to the row
+            rowToDelete = null;
+            saveData();
         }
-        modal.style.display = 'none'; // Hide the modal
+        modal.style.display = 'none';
     });
+
+    // Load data on page load
+    loadData();
 });
