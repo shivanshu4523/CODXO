@@ -63,6 +63,17 @@
                     <!-- Transaction rows will be added here dynamically -->
                 </tbody>
             </table>
+
+            <!-- Modal -->
+<div id="confirm-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <p>Are you sure you want to delete this transaction?</p>
+        <button id="confirm-delete" class="btn confirm-btn">Yes, Delete</button>
+        <button id="cancel-delete" class="btn cancel-btn">Cancel</button>
+    </div>
+</div>
+
             <canvas id="expense-chart"></canvas>
         </section>
     </div>

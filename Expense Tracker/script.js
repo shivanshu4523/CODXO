@@ -7,30 +7,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const debitBox = document.getElementById('debit-box');
     const categoryButtons = document.querySelectorAll('.category-btn');
     const categoryInput = document.getElementById('category');
-
-    // Category color mapping
+    
     const categoryColors = {
-        'Food': '#48d225', // Green for Food
-        'Transportation': '#25d2c9', // Coral for Transportation
-        'Entertainment': '#4a90e2', // Yellow for Entertainment
-        'Daily Needs': '#ddda22', // Yellow for Daily Needs
-        'Others': '#d13939' // Red for Others
+        'Food': '#48d225',
+        'Transportation': '#ff6f61',
+        'Entertainment': '#ffeb3b',
+        'Daily Needs': '#ffeb3b',
+        'Others': '#f44336'
     };
-
-    // Add click event listener to each category button
+    
+    // Modal Elements
+    const modal = document.getElementById('confirm-modal');
+    const closeModalButton = document.querySelector('.close-btn');
+    const confirmDeleteButton = document.getElementById('confirm-delete');
+    const cancelDeleteButton = document.getElementById('cancel-delete');
+    
+    let rowToDelete;
+    
     categoryButtons.forEach(button => {
         button.addEventListener('click', () => {
-            // Remove 'active' class from all buttons
             categoryButtons.forEach(btn => btn.classList.remove('active'));
-            
-            // Add 'active' class to the clicked button
             button.classList.add('active');
-            
-            // Update hidden input with the selected category
             categoryInput.value = button.getAttribute('data-category');
         });
     });
-
+    
     expenseForm.addEventListener('submit', (event) => {
         if (!categoryInput.value) {
             alert('Please select a category.');
@@ -39,93 +40,107 @@ document.addEventListener('DOMContentLoaded', () => {
             addTransaction(event);
         }
     });
-
+    
     let totalBalance = 0;
-    let transactionType = 'credit'; // Default to credit
-
-    // Toggle between Credit and Debit
+    let transactionType = 'credit';
+    
     creditBox.addEventListener('click', () => {
         if (transactionType !== 'credit') {
             transactionType = 'credit';
             slider.style.transform = 'translateX(0)';
-            slider.style.backgroundColor = '#5cb85c'; // Green for credit
+            slider.style.backgroundColor = '#5cb85c';
             creditBox.style.color = 'white';
             debitBox.style.color = 'black';
         }
     });
-
+    
     debitBox.addEventListener('click', () => {
         if (transactionType !== 'debit') {
             transactionType = 'debit';
             slider.style.transform = 'translateX(100%)';
-            slider.style.backgroundColor = '#d9534f'; // Red for debit
+            slider.style.backgroundColor = '#d9534f';
             creditBox.style.color = 'black';
             debitBox.style.color = 'white';
         }
     });
-
+    
     function updateBalance(amount, type) {
         if (type === 'credit') {
             totalBalance += amount;
         } else if (type === 'debit') {
             totalBalance -= amount;
         }
-        totalBalanceSpan.textContent = `₹${totalBalance.toFixed(2)}`;
+        totalBalanceSpan.textContent = `${totalBalance.toFixed(2)}`;
     }
-
+    
     function addTransaction(event) {
         event.preventDefault();
-
+        
         const descriptionInput = document.getElementById('description');
         const amountInput = document.getElementById('amount');
-        const category = categoryInput.value; // Get selected category
-
+        const category = categoryInput.value;
+        
         const description = descriptionInput.value;
         const amount = parseFloat(amountInput.value);
-
+        
         if (description && !isNaN(amount) && amount > 0 && category) {
             const tr = document.createElement('tr');
+            const backgroundColor = transactionType === 'credit' ? '#d4edda' : '#f8d7da';
+            const categoryColor = categoryColors[category] || '#000000';
             
-            // Apply background color based on transaction type
-            const backgroundColor = transactionType === 'credit' ? '#d4edda' : '#f8d7da'; // Light green for credit, light red for debit
-
             tr.style.backgroundColor = backgroundColor;
-
-            // Set the text color for the category based on categoryColors
-            const categoryColor = categoryColors[category] || '#000000'; // Default to black if category not found
-
             tr.innerHTML = `
                 <td>${description}</td>
                 <td>₹${amount.toFixed(2)}</td>
                 <td>${transactionType}</td>
                 <td style="color: ${categoryColor};">${category}</td> 
-                <td><button class="delete" onclick="deleteTransaction(this, ${amount}, '${transactionType}')">Delete</button></td>
+                <td><button class="delete">Delete</button></td>
             `;
-
+            
             expenseTableBody.appendChild(tr);
-
+            
             updateBalance(amount, transactionType);
-
+            
             descriptionInput.value = '';
             amountInput.value = '';
-            categoryInput.value = ''; // Clear selected category
-            categoryButtons.forEach(btn => btn.classList.remove('active')); // Remove active class from all buttons
+            categoryInput.value = '';
+            categoryButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Attach event listener for the new delete button
+            tr.querySelector('.delete').addEventListener('click', function() {
+                rowToDelete = tr; // Store the row to delete
+                modal.style.display = 'block'; // Show the modal
+            });
         } else {
             alert('Please enter a valid description, amount, and category.');
         }
     }
-
-    window.deleteTransaction = function(button, amount, type) {
-        const tr = button.parentElement.parentElement;
-        expenseTableBody.removeChild(tr);
-
-        // Adjust the balance based on the type of transaction
-        if (type === 'credit') {
-            totalBalance -= amount;
-        } else if (type === 'debit') {
-            totalBalance += amount;
+    
+    closeModalButton.addEventListener('click', () => {
+        modal.style.display = 'none'; // Hide the modal
+    });
+    
+    cancelDeleteButton.addEventListener('click', () => {
+        modal.style.display = 'none'; // Hide the modal
+    });
+    
+    confirmDeleteButton.addEventListener('click', () => {
+        if (rowToDelete) {
+            const amount = parseFloat(rowToDelete.querySelector('td:nth-child(2)').textContent.replace('₹', ''));
+            const type = rowToDelete.querySelector('td:nth-child(3)').textContent;
+            
+            expenseTableBody.removeChild(rowToDelete);
+            
+            if (type === 'credit') {
+                totalBalance -= amount;
+            } else if (type === 'debit') {
+                totalBalance += amount;
+            }
+            
+            totalBalanceSpan.textContent = `₹${totalBalance.toFixed(2)}`;
+            
+            rowToDelete = null; // Clear the reference to the row
         }
-
-        totalBalanceSpan.textContent = `₹${totalBalance.toFixed(2)}`;
-    }
+        modal.style.display = 'none'; // Hide the modal
+    });
 });
